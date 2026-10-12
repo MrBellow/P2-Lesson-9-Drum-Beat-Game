@@ -1,0 +1,1368 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Poetry Beat Drummer: Natural Fluency & Rhyme Studio</title>
+    <style>
+        :root {
+            --bg-color: #f0fdf4;
+            --card-bg: #ffffff;
+            --primary-green: #10b981;
+            --primary-green-dark: #059669;
+            --primary-blue: #3b82f6;
+            --primary-blue-dark: #1d4ed8;
+            --rhyme-purple: #8b5cf6;
+            --rhyme-purple-dark: #6d28d9;
+            --accent-yellow: #f59e0b;
+            --text-dark: #0f172a;
+            --text-muted: #64748b;
+            --font-family: 'Fredoka', 'Comic Sans MS', 'Lexend', 'Chalkboard SE', sans-serif;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            user-select: none;
+            -webkit-user-select: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: var(--font-family);
+            background-color: var(--bg-color);
+            background-image: radial-gradient(#cbd5e1 1.5px, transparent 1.5px);
+            background-size: 24px 24px;
+            color: var(--text-dark);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px;
+            overflow-x: hidden;
+        }
+
+        header {
+            width: 100%;
+            max-width: 920px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--card-bg);
+            padding: 14px 24px;
+            border-radius: 24px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+            border: 3px solid #bbf7d0;
+            gap: 12px;
+        }
+
+        .title-group {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .title-group h1 {
+            font-size: 1.6rem;
+            color: #047857;
+            letter-spacing: 0.3px;
+        }
+
+        .stats-bar {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .stat-badge {
+            background: #f8fafc;
+            border: 2px solid #e2e8f0;
+            padding: 6px 14px;
+            border-radius: 16px;
+            font-size: 0.95rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .stat-badge .val {
+            color: #2563eb;
+            font-size: 1.2rem;
+        }
+
+        .combo-badge .val {
+            color: #d97706;
+        }
+
+        .tempo-control {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            background: #f0fdf4;
+            border: 2px solid #86efac;
+            padding: 4px 12px;
+            border-radius: 16px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: #166534;
+        }
+
+        .tempo-select {
+            background: white;
+            border: 1px solid #4ade80;
+            border-radius: 10px;
+            padding: 4px 8px;
+            font-family: inherit;
+            font-weight: 700;
+            color: #15803d;
+            cursor: pointer;
+        }
+
+        .audio-btn {
+            background: #fef08a;
+            border: 2px solid #facc15;
+            padding: 8px 16px;
+            border-radius: 18px;
+            cursor: pointer;
+            font-weight: 700;
+            font-family: inherit;
+            color: #854d0e;
+            transition: all 0.15s ease;
+        }
+
+        .audio-btn:active {
+            transform: scale(0.95);
+        }
+
+        main {
+            width: 100%;
+            max-width: 920px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            align-items: center;
+            margin: 12px 0;
+            flex-grow: 1;
+        }
+
+        /* Stanza Navigation */
+        .selector-bar {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            justify-content: center;
+            width: 100%;
+        }
+
+        .stanza-btn {
+            background: #ffffff;
+            border: 3px solid #cbd5e1;
+            padding: 10px 18px;
+            border-radius: 20px;
+            font-family: inherit;
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 0 #cbd5e1;
+        }
+
+        .stanza-btn:hover {
+            border-color: #94a3b8;
+        }
+
+        .stanza-btn.active {
+            background: #dbeafe;
+            border-color: #2563eb;
+            color: #1e40af;
+            box-shadow: 0 4px 0 #2563eb;
+            transform: translateY(-2px);
+        }
+
+        /* Controls / Modes Bar */
+        .mode-bar {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .btn-action {
+            background: #10b981;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 22px;
+            font-family: inherit;
+            font-size: 1.05rem;
+            font-weight: 800;
+            cursor: pointer;
+            box-shadow: 0 5px 0 #047857;
+            transition: all 0.15s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-action:active {
+            transform: translateY(3px);
+            box-shadow: 0 2px 0 #047857;
+        }
+
+        .btn-action.btn-listen {
+            background: #8b5cf6;
+            box-shadow: 0 5px 0 #6d28d9;
+        }
+
+        .btn-action.btn-listen:active {
+            box-shadow: 0 2px 0 #6d28d9;
+        }
+
+        /* Poem Container Card */
+        .poem-card {
+            background: var(--card-bg);
+            border: 4px solid #a7f3d0;
+            border-radius: 32px;
+            width: 100%;
+            padding: 32px 24px;
+            box-shadow: 0 16px 32px rgba(0,0,0,0.06);
+            display: flex;
+            flex-direction: column;
+            gap: 28px;
+            align-items: center;
+            position: relative;
+        }
+
+        .fluency-tip-box {
+            background: #f0fdf4;
+            border: 2px dashed #34d399;
+            padding: 8px 18px;
+            border-radius: 16px;
+            font-size: 0.9rem;
+            color: #065f46;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* Natural Metronome Track */
+        .metronome-track {
+            width: 100%;
+            height: 8px;
+            background: #e2e8f0;
+            border-radius: 4px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .metronome-progress {
+            height: 100%;
+            background: linear-gradient(90deg, #10b981, #3b82f6, #8b5cf6);
+            width: 0%;
+            transition: width 0.1s linear;
+        }
+
+        /* Poem Lines & Phrase Scoops */
+        .poem-display {
+            display: flex;
+            flex-direction: column;
+            gap: 32px;
+            width: 100%;
+            align-items: center;
+        }
+
+        .poem-line {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: flex-end;
+            gap: 12px sm:gap-18px;
+            font-size: 1.8rem;
+            font-weight: 700;
+            line-height: 1.4;
+        }
+
+        @media (max-width: 640px) {
+            .poem-line {
+                font-size: 1.35rem;
+                gap: 8px;
+            }
+        }
+
+        /* Phrase Scoop Container */
+        .phrase-scoop {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 4px 10px;
+            border-radius: 18px;
+            position: relative;
+            background: rgba(241, 245, 249, 0.6);
+            border-bottom: 3px solid #cbd5e1;
+            transition: all 0.2s ease;
+        }
+
+        .phrase-scoop::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 10%;
+            width: 80%;
+            height: 6px;
+            border-bottom: 3px solid #94a3b8;
+            border-radius: 0 0 50% 50%;
+            opacity: 0.5;
+        }
+
+        .phrase-scoop.active-scoop {
+            background: #e0f2fe;
+            border-bottom-color: #3b82f6;
+        }
+
+        .phrase-scoop.active-scoop::after {
+            border-bottom-color: #2563eb;
+            opacity: 1;
+        }
+
+        /* Word styling */
+        .word-span {
+            padding: 4px 8px;
+            border-radius: 12px;
+            transition: all 0.15s ease;
+            position: relative;
+        }
+
+        .word-span.unstressed {
+            color: #64748b;
+            font-weight: 500;
+            font-size: 0.9em;
+        }
+
+        .word-span.stress-beat {
+            color: #0f172a;
+            font-weight: 800;
+        }
+
+        .word-span.stress-beat::after {
+            content: '🥁';
+            font-size: 0.65rem;
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            opacity: 0.6;
+        }
+
+        .word-span.rhyme-beat {
+            color: #6d28d9;
+            background: #f3e8ff;
+            border: 2px solid #c084fc;
+            font-weight: 800;
+        }
+
+        .word-span.rhyme-beat::after {
+            content: '★ RHYME';
+            font-size: 0.55rem;
+            font-weight: 800;
+            color: #7e22ce;
+            position: absolute;
+            top: -14px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #fae8ff;
+            padding: 1px 6px;
+            border-radius: 8px;
+            border: 1px solid #e9d5ff;
+            white-space: nowrap;
+        }
+
+        /* Active highlight during game */
+        .word-span.current-target {
+            transform: scale(1.18) translateY(-4px);
+            background: #fef08a !important;
+            border-color: #eab308 !important;
+            color: #854d0e !important;
+            box-shadow: 0 8px 16px rgba(234, 179, 8, 0.35);
+            z-index: 10;
+        }
+
+        .word-span.current-rhyme-target {
+            transform: scale(1.22) translateY(-4px);
+            background: #c084fc !important;
+            color: #ffffff !important;
+            border-color: #7e22ce !important;
+            box-shadow: 0 8px 20px rgba(147, 51, 234, 0.45);
+            z-index: 10;
+        }
+
+        .word-span.hit-success {
+            background: #dcfce7 !important;
+            color: #15803d !important;
+            border-color: #22c55e !important;
+        }
+
+        /* Drum Section */
+        .drum-section {
+            width: 100%;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 18px;
+            margin-top: 6px;
+        }
+
+        .drum-pad {
+            height: 130px;
+            border-radius: 28px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.2rem;
+            font-weight: 800;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            border: none;
+            transition: transform 0.08s ease, box-shadow 0.08s ease;
+        }
+
+        .drum-pad .sub-text {
+            font-size: 0.82rem;
+            font-weight: 600;
+            opacity: 0.9;
+            margin-top: 4px;
+        }
+
+        .drum-pad .key-hint {
+            font-size: 0.75rem;
+            background: rgba(0, 0, 0, 0.25);
+            padding: 3px 10px;
+            border-radius: 10px;
+            margin-top: 8px;
+            letter-spacing: 0.5px;
+        }
+
+        .drum-beat {
+            background: linear-gradient(135deg, var(--primary-blue), var(--primary-blue-dark));
+            box-shadow: 0 10px 0 #1d4ed8, 0 12px 20px rgba(37, 99, 235, 0.3);
+        }
+
+        .drum-beat:active, .drum-beat.pressed {
+            transform: translateY(6px);
+            box-shadow: 0 4px 0 #1d4ed8, 0 6px 10px rgba(37, 99, 235, 0.2);
+        }
+
+        .drum-rhyme {
+            background: linear-gradient(135deg, var(--rhyme-purple), var(--rhyme-purple-dark));
+            box-shadow: 0 10px 0 #5b21b6, 0 12px 20px rgba(124, 58, 237, 0.3);
+        }
+
+        .drum-rhyme:active, .drum-rhyme.pressed {
+            transform: translateY(6px);
+            box-shadow: 0 4px 0 #5b21b6, 0 6px 10px rgba(124, 58, 237, 0.2);
+        }
+
+        /* Ripple effect */
+        .ripple {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.45);
+            transform: scale(0);
+            animation: ripple-anim 0.35s linear;
+            pointer-events: none;
+        }
+
+        @keyframes ripple-anim {
+            to {
+                transform: scale(4);
+                opacity: 0;
+            }
+        }
+
+        .legend-card {
+            background: #ffffff;
+            border: 2px solid #e2e8f0;
+            border-radius: 18px;
+            padding: 10px 18px;
+            font-size: 0.88rem;
+            color: var(--text-muted);
+            text-align: center;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 700;
+        }
+
+        .dot-beat {
+            width: 14px;
+            height: 14px;
+            background: var(--primary-blue);
+            border-radius: 50%;
+        }
+
+        .dot-rhyme {
+            width: 14px;
+            height: 14px;
+            background: var(--rhyme-purple);
+            border-radius: 50%;
+        }
+
+        /* Feedback popups */
+        .feedback-container {
+            position: fixed;
+            top: 38%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+            z-index: 100;
+        }
+
+        .milestone-modal {
+            position: fixed;
+            inset: 0;
+            background: rgba(15, 23, 42, 0.75);
+            backdrop-filter: blur(8px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 200;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .milestone-modal.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .milestone-card {
+            background: linear-gradient(135deg, #ffffff, #f0fdf4);
+            border: 6px solid #fbbf24;
+            border-radius: 36px;
+            padding: 36px;
+            text-align: center;
+            max-width: 440px;
+            width: 90%;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.35);
+            transform: scale(0.7);
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .milestone-modal.active .milestone-card {
+            transform: scale(1);
+        }
+
+        .milestone-badge {
+            font-size: 4.5rem;
+            margin-bottom: 8px;
+            animation: bounce-badge 1s infinite alternate ease-in-out;
+        }
+
+        @keyframes bounce-badge {
+            from { transform: translateY(0) scale(1); }
+            to { transform: translateY(-12px) scale(1.1); }
+        }
+
+        .milestone-title {
+            font-size: 2.2rem;
+            font-weight: 900;
+            color: #065f46;
+            margin-bottom: 8px;
+            line-height: 1.1;
+        }
+
+        .milestone-subtitle {
+            font-size: 1.1rem;
+            color: #475569;
+            font-weight: 700;
+            margin-bottom: 24px;
+        }
+
+        .milestone-btn {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            border: none;
+            padding: 14px 32px;
+            border-radius: 24px;
+            font-family: inherit;
+            font-size: 1.2rem;
+            font-weight: 800;
+            cursor: pointer;
+            box-shadow: 0 6px 0 #047857;
+            transition: transform 0.15s ease;
+        }
+
+        .milestone-btn:active {
+            transform: translateY(3px);
+            box-shadow: 0 2px 0 #047857;
+        }
+
+        .feedback-pop {
+            font-size: 2.6rem;
+            font-weight: 900;
+            font-family: inherit;
+            text-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            animation: pop-up 0.8s ease-out forwards;
+        }
+
+        .feedback-perfect { color: #10b981; }
+        .feedback-rhyme { color: #8b5cf6; }
+        .feedback-miss { color: #ef4444; }
+
+        @keyframes pop-up {
+            0% { opacity: 0; transform: scale(0.5) translateY(20px); }
+            40% { opacity: 1; transform: scale(1.15) translateY(-10px); }
+            100% { opacity: 0; transform: scale(1) translateY(-40px); }
+        }
+
+        #fxCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none;
+            z-index: 99;
+        }
+    </style>
+</head>
+<body>
+
+    <canvas id="fxCanvas"></canvas>
+    <div class="feedback-container" id="feedbackBox"></div>
+
+    <div class="milestone-modal" id="milestoneModal">
+        <div class="milestone-card">
+            <div class="milestone-badge" id="mBadge">🌟</div>
+            <h2 class="milestone-title" id="mTitle">5,000 POINTS!</h2>
+            <p class="milestone-subtitle" id="mSub">Super Star Rhythm Drummer!</p>
+            <button class="milestone-btn" onclick="closeMilestoneModal()">Keep Drumming! 🥁</button>
+        </div>
+    </div>
+
+    <header>
+        <div class="title-group">
+            <span style="font-size: 2.2rem;">🥁</span>
+            <div>
+                <h1>Poetry Beat Drummer</h1>
+                <p style="font-size: 0.8rem; color: #64748b; font-weight: 700;">Natural Sentence Fluency & Rhyme Studio</p>
+            </div>
+        </div>
+
+        <div class="stats-bar">
+            <div class="tempo-control">
+                <span>🐢 Pace:</span>
+                <select class="tempo-select" id="tempoSelect" onchange="changeTempo(this.value)">
+                    <option value="920" selected>Gentle (Early Reader)</option>
+                    <option value="760">Walking Pace</option>
+                    <option value="600">Brisk Rhythm</option>
+                </select>
+            </div>
+
+            <div class="stat-badge">
+                <span>Fluency:</span>
+                <span id="scoreVal" class="val">0</span>
+            </div>
+            <div class="stat-badge combo-badge">
+                <span>Streak:</span>
+                <span id="comboVal" class="val">0x</span>
+            </div>
+            <button id="soundToggleBtn" class="audio-btn" onclick="toggleAudioMaster()">🔊 Backing Beat ON</button>
+        </div>
+    </header>
+
+    <main>
+        <!-- Stanza Selector -->
+        <div class="selector-bar" id="stanzaSelector">
+            <button class="stanza-btn active" onclick="loadStanza(0)">Slide Poem 🛝</button>
+            <button class="stanza-btn" onclick="loadStanza(1)">Swing Poem 🎪</button>
+            <button class="stanza-btn" onclick="loadStanza(2)">Park Poem 🌳</button>
+        </div>
+
+        <!-- Mode Buttons -->
+        <div class="mode-bar">
+            <button class="btn-action btn-listen" id="listenBtn" onclick="startListenMode()">
+                <span>🎧</span> Chant & Scoop Practice
+            </button>
+            <button class="btn-action" id="playBtn" onclick="startPlayMode()">
+                <span>▶️</span> Start Fluency Drumming!
+            </button>
+        </div>
+
+        <!-- Poem Card -->
+        <div class="poem-card">
+            <div class="fluency-tip-box" id="fluencyTip">
+                💡 <b>Fluency Secret:</b> Don't tap every small word! Tap the <b>strong beats 🥁</b> and the <b>end rhyme ★</b>.
+            </div>
+
+            <!-- Metronome Progress Bar -->
+            <div class="metronome-track">
+                <div class="metronome-progress" id="metroBar"></div>
+            </div>
+
+            <!-- Poem Display with Phrase Scoops -->
+            <div class="poem-display" id="poemDisplay"></div>
+        </div>
+
+        <!-- Instructions Legend -->
+        <div class="legend-card">
+            <div class="legend-item">
+                <div class="dot-beat"></div>
+                <span>STRESS DRUM = Main Rhythm Beat Words</span>
+            </div>
+            <div class="legend-item">
+                <div class="dot-rhyme"></div>
+                <span>RHYME DRUM = ★ End Rhyme Words</span>
+            </div>
+        </div>
+
+        <!-- Drums -->
+        <div class="drum-section">
+            <button class="drum-pad drum-beat" id="drumBeat" onmousedown="triggerDrum('beat')" ontouchstart="triggerDrum('beat', event)">
+                <span>STRESS BEAT 🥁</span>
+                <span class="sub-text">Keep the natural cadence</span>
+                <span class="key-hint">Press [A] or [◄ Left]</span>
+            </button>
+
+            <button class="drum-pad drum-rhyme" id="drumRhyme" onmousedown="triggerDrum('rhyme')" ontouchstart="triggerDrum('rhyme', event)">
+                <span>RHYME ACCENT ★</span>
+                <span class="sub-text">Hit the rhyming word!</span>
+                <span class="key-hint">Press [L] or [► Right]</span>
+            </button>
+        </div>
+    </main>
+
+    <script>
+        // --- STANZAS DATA structured for NATURAL ENGLISH STRESS & PHRASE SCOOPING ---
+        // English is stress-timed! Only stressed content words and end-rhyme words get drum beats.
+        const STANZAS = [
+            {
+                id: 0,
+                title: "Red Slide",
+                lines: [
+                    {
+                        scoops: [
+                            {
+                                words: [
+                                    { text: "Run", role: "stress", id: "s0_l0_w0" },
+                                    { text: "to the", role: "unstressed", id: "s0_l0_w1" },
+                                    { text: "red", role: "stress", id: "s0_l0_w2" }
+                                ]
+                            },
+                            {
+                                words: [
+                                    { text: "slide,", role: "rhyme", id: "s0_l0_w3" }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        scoops: [
+                            {
+                                words: [
+                                    { text: "Wait", role: "stress", id: "s0_l1_w0" },
+                                    { text: "for a", role: "unstressed", id: "s0_l1_w1" },
+                                    { text: "fun", role: "stress", id: "s0_l1_w2" }
+                                ]
+                            },
+                            {
+                                words: [
+                                    { text: "ride.", role: "rhyme", id: "s0_l1_w3" }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                id: 1,
+                title: "Big Swing",
+                lines: [
+                    {
+                        scoops: [
+                            {
+                                words: [
+                                    { text: "Rush", role: "stress", id: "s1_l0_w0" },
+                                    { text: "to the", role: "unstressed", id: "s1_l0_w1" },
+                                    { text: "big", role: "stress", id: "s1_l0_w2" }
+                                ]
+                            },
+                            {
+                                words: [
+                                    { text: "swing,", role: "rhyme", id: "s1_l0_w3" }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        scoops: [
+                            {
+                                words: [
+                                    { text: "Sing", role: "stress", id: "s1_l1_w0" },
+                                    { text: "like a", role: "unstressed", id: "s1_l1_w1" },
+                                    { text: "happy", role: "stress", id: "s1_l1_w2" }
+                                ]
+                            },
+                            {
+                                words: [
+                                    { text: "king.", role: "rhyme", id: "s1_l1_w3" }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                id: 2,
+                title: "Park Rail",
+                lines: [
+                    {
+                        scoops: [
+                            {
+                                words: [
+                                    { text: "Hold", role: "stress", id: "s2_l0_w0" },
+                                    { text: "the", role: "unstressed", id: "s2_l0_w1" },
+                                    { text: "rail", role: "stress", id: "s2_l0_w2" }
+                                ]
+                            },
+                            {
+                                words: [
+                                    { text: "with", role: "unstressed", id: "s2_l0_w3" },
+                                    { text: "care,", role: "rhyme", id: "s2_l0_w4" }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        scoops: [
+                            {
+                                words: [
+                                    { text: "Look", role: "stress", id: "s2_l1_w0" },
+                                    { text: "around", role: "unstressed", id: "s2_l1_w1" },
+                                    { text: "every", role: "stress", id: "s2_l1_w2" }
+                                ]
+                            },
+                            {
+                                words: [
+                                    { text: "where.", role: "rhyme", id: "s2_l1_w3" }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            }
+        ];
+
+        // Global State
+        let currentStanzaIdx = 0;
+        let score = 0;
+        let combo = 0;
+        let gameState = 'idle'; // 'idle', 'listen', 'play'
+        let currentTargetIndex = -1;
+        let targetQueue = []; // Sequence of stressed targets to hit in timing order
+        let timerId = null;
+        let isAudioMuted = false;
+        let currentScoopIdx = -1;
+
+        let stepDurationMs = 920; // Slower, relaxed rhythm pace for early readers
+        let hit5kMilestone = false;
+        let hit10kMilestone = false;
+
+        // Web Audio API Synth & Backing Track Loop
+        let audioCtx = null;
+
+        function initAudio() {
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+        }
+
+        function playMilestoneSound(level) {
+            if (isAudioMuted) return;
+            initAudio();
+            const now = audioCtx.currentTime;
+
+            if (level === 1) {
+                // 5,000 Points: Magic Ascending Star Chime
+                const notes = [523.25, 659.25, 783.99, 1046.50, 1318.51]; // C5, E5, G5, C6, E6
+                notes.forEach((freq, idx) => {
+                    const osc = audioCtx.createOscillator();
+                    const gain = audioCtx.createGain();
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(freq, now + idx * 0.09);
+
+                    gain.gain.setValueAtTime(0.35, now + idx * 0.09);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.09 + 0.35);
+
+                    osc.connect(gain);
+                    gain.connect(audioCtx.destination);
+                    osc.start(now + idx * 0.09);
+                    osc.stop(now + idx * 0.09 + 0.35);
+                });
+            } else if (level === 2) {
+                // 10,000 Points: Royal Triumph Fanfare & Drum Roll
+                const chords = [
+                    { f1: 349.23, f2: 440.00, f3: 523.25, time: 0 },       // F major
+                    { f1: 392.00, f2: 493.88, f3: 587.33, time: 0.22 },    // G major
+                    { f1: 523.25, f2: 659.25, f3: 783.99, time: 0.45 }     // C major high triumph
+                ];
+
+                chords.forEach(c => {
+                    [c.f1, c.f2, c.f3].forEach(freq => {
+                        const osc = audioCtx.createOscillator();
+                        const gain = audioCtx.createGain();
+                        osc.type = 'triangle';
+                        osc.frequency.setValueAtTime(freq, now + c.time);
+
+                        gain.gain.setValueAtTime(0.3, now + c.time);
+                        gain.gain.exponentialRampToValueAtTime(0.001, now + c.time + 0.5);
+
+                        osc.connect(gain);
+                        gain.connect(audioCtx.destination);
+                        osc.start(now + c.time);
+                        osc.stop(now + c.time + 0.5);
+                    });
+                });
+            }
+        }
+
+        function playSynthesizerSound(type) {
+            if (isAudioMuted) return;
+            initAudio();
+            const now = audioCtx.currentTime;
+
+            if (type === 'beat') {
+                // Warm acoustic snare / bongo pulse
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = 'triangle';
+                osc.frequency.setValueAtTime(220, now);
+                osc.frequency.exponentialRampToValueAtTime(70, now + 0.15);
+                gain.gain.setValueAtTime(0.5, now);
+                gain.gain.exponentialRampToValueAtTime(0.01, now + 0.15);
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start(now);
+                osc.stop(now + 0.15);
+            } else if (type === 'rhyme') {
+                // Sparkling Cymbal / Chime accent
+                const osc1 = audioCtx.createOscillator();
+                const osc2 = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+
+                osc1.type = 'sine';
+                osc2.type = 'triangle';
+                osc1.frequency.setValueAtTime(659.25, now); // E5
+                osc2.frequency.setValueAtTime(987.77, now); // B5
+
+                gain.gain.setValueAtTime(0.6, now);
+                gain.gain.exponentialRampToValueAtTime(0.001, now + 0.35);
+
+                osc1.connect(gain);
+                osc2.connect(gain);
+                gain.connect(audioCtx.destination);
+
+                osc1.start(now);
+                osc2.start(now);
+                osc1.stop(now + 0.35);
+                osc2.stop(now + 0.35);
+            } else if (type === 'tick') {
+                // Gentle pulse for rhythm background
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(440, now);
+                gain.gain.setValueAtTime(0.05, now);
+                gain.gain.exponentialRampToValueAtTime(0.001, now + 0.04);
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start(now);
+                osc.stop(now + 0.04);
+            }
+        }
+
+        function speakText(text) {
+            if (isAudioMuted || !('speechSynthesis' in window)) return;
+            window.speechSynthesis.cancel();
+            const utt = new SpeechSynthesisUtterance(text);
+            utt.rate = 0.95;
+            utt.pitch = 1.15;
+            window.speechSynthesis.speak(utt);
+        }
+
+        function toggleAudioMaster() {
+            isAudioMuted = !isAudioMuted;
+            const btn = document.getElementById('soundToggleBtn');
+            btn.innerText = isAudioMuted ? "🔇 Backing Beat OFF" : "🔊 Backing Beat ON";
+        }
+
+        // Render Stanza & Phrase Scoops
+        function loadStanza(idx) {
+            stopGameEngine();
+            currentStanzaIdx = idx;
+
+            // Selector Button state
+            const buttons = document.querySelectorAll('.stanza-btn');
+            buttons.forEach((btn, i) => btn.classList.toggle('active', i === idx));
+
+            const stanza = STANZAS[idx];
+            const display = document.getElementById('poemDisplay');
+            display.innerHTML = '';
+            targetQueue = [];
+
+            stanza.lines.forEach((line, lIdx) => {
+                const lineEl = document.createElement('div');
+                lineEl.className = 'poem-line';
+
+                line.scoops.forEach((scoop, sIdx) => {
+                    const scoopEl = document.createElement('div');
+                    scoopEl.className = 'phrase-scoop';
+                    scoopEl.id = `scoop_${lIdx}_${sIdx}`;
+
+                    scoop.words.forEach(w => {
+                        const wordEl = document.createElement('span');
+                        wordEl.id = w.id;
+
+                        if (w.role === 'unstressed') {
+                            wordEl.className = 'word-span unstressed';
+                        } else if (w.role === 'stress') {
+                            wordEl.className = 'word-span stress-beat';
+                            targetQueue.push({ id: w.id, text: w.text, role: 'stress', scoopId: scoopEl.id });
+                        } else if (w.role === 'rhyme') {
+                            wordEl.className = 'word-span rhyme-beat';
+                            targetQueue.push({ id: w.id, text: w.text, role: 'rhyme', scoopId: scoopEl.id });
+                        }
+
+                        wordEl.innerText = w.text;
+                        scoopEl.appendChild(wordEl);
+                    });
+
+                    lineEl.appendChild(scoopEl);
+                });
+
+                display.appendChild(lineEl);
+            });
+
+            document.getElementById('metroBar').style.width = '0%';
+        }
+
+        function startListenMode() {
+            initAudio();
+            stopGameEngine();
+            gameState = 'listen';
+            currentTargetIndex = -1;
+            showFloatingFeedback("CHANT ALONG!", "feedback-rhyme");
+            runRhythmLoop();
+        }
+
+        function startPlayMode() {
+            initAudio();
+            stopGameEngine();
+            gameState = 'play';
+            currentTargetIndex = -1;
+            showFloatingFeedback("LISTEN & TAP!", "feedback-perfect");
+            runRhythmLoop();
+        }
+
+        function changeTempo(val) {
+            stepDurationMs = parseInt(val, 10);
+            if (gameState !== 'idle') {
+                runRhythmLoop(); // Restart timer with new tempo pacing
+            }
+        }
+
+        function stopGameEngine() {
+            if (timerId) clearInterval(timerId);
+            timerId = null;
+            gameState = 'idle';
+            clearHighlights();
+            document.getElementById('metroBar').style.width = '0%';
+        }
+
+        function runRhythmLoop() {
+            if (timerId) clearInterval(timerId);
+            let currentStep = -1;
+
+            timerId = setInterval(() => {
+                currentStep++;
+
+                if (currentStep >= targetQueue.length + 1) {
+                    currentStep = 0; // Loop seamlessly
+                }
+
+                clearHighlights();
+
+                const progress = ((currentStep + 1) / (targetQueue.length + 1)) * 100;
+                document.getElementById('metroBar').style.width = `${progress}%`;
+
+                playSynthesizerSound('tick');
+
+                if (currentStep < targetQueue.length) {
+                    currentTargetIndex = currentStep;
+                    const item = targetQueue[currentStep];
+
+                    // Highlight Phrase Scoop
+                    const scoopEl = document.getElementById(item.scoopId);
+                    if (scoopEl) scoopEl.classList.add('active-scoop');
+
+                    // Highlight Target Word
+                    const wordEl = document.getElementById(item.id);
+                    if (wordEl) {
+                        if (item.role === 'rhyme') {
+                            wordEl.classList.add('current-rhyme-target');
+                        } else {
+                            wordEl.classList.add('current-target');
+                        }
+                    }
+
+                    // In listen/practice mode, speak and play natural accents
+                    if (gameState === 'listen') {
+                        speakText(item.text);
+                        playSynthesizerSound(item.role === 'rhyme' ? 'rhyme' : 'beat');
+                    }
+                }
+            }, stepDurationMs);
+        }
+
+        function clearHighlights() {
+            document.querySelectorAll('.phrase-scoop').forEach(el => el.classList.remove('active-scoop'));
+            document.querySelectorAll('.word-span').forEach(el => {
+                el.classList.remove('current-target', 'current-rhyme-target');
+            });
+        }
+
+        function triggerDrum(drumType, evt) {
+            if (evt) evt.preventDefault();
+
+            const pad = drumType === 'beat' ? document.getElementById('drumBeat') : document.getElementById('drumRhyme');
+            pad.classList.add('pressed');
+            setTimeout(() => pad.classList.remove('pressed'), 120);
+
+            createRipple(pad);
+            playSynthesizerSound(drumType);
+
+            if (gameState === 'play') {
+                checkTimingAndScore(drumType);
+            }
+        }
+
+        function createRipple(element) {
+            const ripple = document.createElement('span');
+            ripple.className = 'ripple';
+            const rect = element.getBoundingClientRect();
+            const size = Math.max(rect.width, rect.height);
+            ripple.style.width = ripple.style.height = `${size}px`;
+            ripple.style.left = `${rect.width / 2 - size / 2}px`;
+            ripple.style.top = `${rect.height / 2 - size / 2}px`;
+            element.appendChild(ripple);
+            setTimeout(() => ripple.remove(), 350);
+        }
+
+        function checkTimingAndScore(drumType) {
+            if (currentTargetIndex < 0 || currentTargetIndex >= targetQueue.length) return;
+
+            const currentTarget = targetQueue[currentTargetIndex];
+            const expectedType = currentTarget.role === 'rhyme' ? 'rhyme' : 'beat';
+
+            if (drumType === expectedType) {
+                combo++;
+                score += (drumType === 'rhyme' ? 200 : 100) + (combo * 15);
+                updateScoreDisplay();
+
+                const domNode = document.getElementById(currentTarget.id);
+                if (domNode) domNode.classList.add('hit-success');
+
+                if (drumType === 'rhyme') {
+                    showFloatingFeedback("RHYME MATCH! ★", "feedback-rhyme");
+                    triggerParticleBurst();
+                } else if (combo % 4 === 0) {
+                    showFloatingFeedback(`GREAT FLUENCY! ${combo}x`, "feedback-perfect");
+                    triggerParticleBurst();
+                } else {
+                    showFloatingFeedback("NICE BEAT!", "feedback-perfect");
+                }
+            } else {
+                combo = 0;
+                updateScoreDisplay();
+                showFloatingFeedback("LISTEN TO THE BEAT!", "feedback-miss");
+            }
+        }
+
+        function updateScoreDisplay() {
+            document.getElementById('scoreVal').innerText = score;
+            document.getElementById('comboVal').innerText = `${combo}x`;
+
+            if (score >= 5000 && !hit5kMilestone) {
+                hit5kMilestone = true;
+                triggerMilestoneSurprise(1);
+            } else if (score >= 10000 && !hit10kMilestone) {
+                hit10kMilestone = true;
+                triggerMilestoneSurprise(2);
+            }
+        }
+
+        function triggerMilestoneSurprise(level) {
+            playMilestoneSound(level);
+
+            const modal = document.getElementById('milestoneModal');
+            const badge = document.getElementById('mBadge');
+            const title = document.getElementById('mTitle');
+            const sub = document.getElementById('mSub');
+
+            if (level === 1) {
+                badge.innerText = '🌟';
+                title.innerText = '5,000 POINTS!';
+                sub.innerText = 'Super Star Rhythm Drummer!';
+                triggerStarExplosion();
+            } else {
+                badge.innerText = '👑';
+                title.innerText = '10,000 POINTS!';
+                sub.innerText = 'Phonics Beat Master Champion!';
+                triggerRainbowGrandFireworks();
+            }
+
+            modal.classList.add('active');
+        }
+
+        function closeMilestoneModal() {
+            document.getElementById('milestoneModal').classList.remove('active');
+        }
+
+        function showFloatingFeedback(text, cssClass) {
+            const box = document.getElementById('feedbackBox');
+            box.innerHTML = `<div class="feedback-pop ${cssClass}">${text}</div>`;
+            setTimeout(() => box.innerHTML = '', 800);
+        }
+
+        // Keyboard Controls
+        window.addEventListener('keydown', (e) => {
+            if (e.repeat) return;
+            if (e.key === 'a' || e.key === 'A' || e.key === 'ArrowLeft') {
+                triggerDrum('beat');
+            } else if (e.key === 'l' || e.key === 'L' || e.key === 'ArrowRight') {
+                triggerDrum('rhyme');
+            }
+        });
+
+        const canvas = document.getElementById('fxCanvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        function triggerParticleBurst() {
+            const colors = ['#8b5cf6', '#3b82f6', '#10b981', '#f59e0b', '#ec4899'];
+            for (let i = 0; i < 35; i++) {
+                particles.push({
+                    x: canvas.width / 2,
+                    y: canvas.height / 2,
+                    vx: (Math.random() - 0.5) * 10,
+                    vy: (Math.random() - 0.5) * 10 - 2,
+                    size: Math.random() * 8 + 4,
+                    color: colors[Math.floor(Math.random() * colors.length)],
+                    life: 1.0,
+                    shape: 'circle'
+                });
+            }
+        }
+
+        function triggerStarExplosion() {
+            const colors = ['#fbbf24', '#f59e0b', '#34d399', '#60a5fa', '#a78bfa'];
+            for (let i = 0; i < 90; i++) {
+                particles.push({
+                    x: canvas.width / 2,
+                    y: canvas.height / 2,
+                    vx: (Math.random() - 0.5) * 16,
+                    vy: (Math.random() - 0.5) * 16 - 3,
+                    size: Math.random() * 12 + 6,
+                    color: colors[Math.floor(Math.random() * colors.length)],
+                    life: 1.2,
+                    shape: 'star'
+                });
+            }
+        }
+
+        function triggerRainbowGrandFireworks() {
+            const colors = ['#ef4444', '#f97316', '#eab308', '#22c55e', '#06b6d4', '#3b82f6', '#a855f7'];
+            for (let wave = 0; wave < 3; wave++) {
+                setTimeout(() => {
+                    const originX = canvas.width * (0.2 + wave * 0.3);
+                    const originY = canvas.height * (0.3 + (wave % 2) * 0.2);
+                    for (let i = 0; i < 70; i++) {
+                        particles.push({
+                            x: originX,
+                            y: originY,
+                            vx: (Math.random() - 0.5) * 18,
+                            vy: (Math.random() - 0.5) * 18 - 2,
+                            size: Math.random() * 14 + 6,
+                            color: colors[Math.floor(Math.random() * colors.length)],
+                            life: 1.4,
+                            shape: Math.random() > 0.5 ? 'star' : 'circle'
+                        });
+                    }
+                }, wave * 220);
+            }
+        }
+
+        function updateParticles() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            for (let i = particles.length - 1; i >= 0; i--) {
+                const p = particles[i];
+                p.x += p.vx;
+                p.y += p.vy;
+                p.vy += 0.16;
+                p.life -= 0.02;
+
+                if (p.life <= 0) {
+                    particles.splice(i, 1);
+                } else {
+                    ctx.globalAlpha = Math.max(0, p.life);
+                    ctx.fillStyle = p.color;
+
+                    if (p.shape === 'star') {
+                        ctx.beginPath();
+                        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+                        ctx.fill();
+                    } else {
+                        ctx.beginPath();
+                        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+                        ctx.fill();
+                    }
+                }
+            }
+            ctx.globalAlpha = 1.0;
+            requestAnimationFrame(updateParticles);
+        }
+        requestAnimationFrame(updateParticles);
+
+        // Initial Load
+        window.onload = () => {
+            loadStanza(0);
+        };
+    </script>
+</body>
+</html>
